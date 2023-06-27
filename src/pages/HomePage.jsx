@@ -1,3 +1,5 @@
+
+
 import { useDispatch, useSelector } from "react-redux";
 import { colorStore } from "../features/colorSlice";
 import React, { useState } from "react";
@@ -5,25 +7,27 @@ import { useNavigate } from "react-router-dom";
 import Color from "tinycolor2";
 
 const ColorPicker = () => {
-  const storedcolor = useSelector((state)=>state.color.colorData)
+  const storedColors = useSelector((state) => state.color.colorData.flat());
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
+  const [colorGroup, setColorGroup] = useState([]);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const handleSaveColor = () => {
-    if (inputValue !== "" && storedcolor.length < 5) {
-      dispatch(colorStore(inputValue));
+    if (colorGroup.length < 5) {
+      setColorGroup([...colorGroup, inputValue]);
       setInputValue("");
-      if (storedcolor.length === 3) {
-        navigate("/generate"); // Redirect to the desired route
+      if (colorGroup.length === 4) {
+        dispatch(colorStore(colorGroup));
+        setColorGroup([]); 
+        navigate("/generate"); 
       }
     }
   };
-
 
   const rgbCode = Color(inputValue).toRgbString();
 
@@ -35,38 +39,40 @@ const ColorPicker = () => {
       <div className="bg-white p-8 rounded-lg shadow-lg mt-8">
         <h2 className="text-2xl font-bold mb-4">Choose a Color</h2>
         <div className="flex gap-5">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Enter color hex code"
-          className="px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500"
-        />
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Enter color hex code"
+            className="px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500"
+          />
 
-        <input
-          type="text"
-          value={rgbCode}
-          placeholder="RGB Color"
-          className="px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500"
-          readOnly
-        />
+          <input
+            type="text"
+            value={rgbCode}
+            placeholder="RGB Color"
+            className="px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500"
+            readOnly
+          />
 
-        <button
-          onClick={handleSaveColor}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-2 rounded h-10"
-        >
-          Save Color
-        </button>
+          <button
+            onClick={handleSaveColor}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-2 rounded h-10"
+          >
+            Save Color
+          </button>
         </div>
 
         <div>
-        <button
-          onClick={() => navigate("/generate")}
-          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-2 fixed top-1 right-2"
-        >
-          Saved Color
-        </button>
-        <p className="fixed top-0 right-1 rounded-full bg-black text-white px-2">{storedcolor.length}</p>
+          <button
+            onClick={() => navigate("/generate")}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-2 fixed top-1 right-2"
+          >
+            Saved Color
+          </button>
+          <p className="fixed top-0 right-1 rounded-full bg-black text-white px-2">
+            {storedColors.length}
+          </p>
         </div>
       </div>
     </div>
@@ -74,4 +80,6 @@ const ColorPicker = () => {
 };
 
 export default ColorPicker;
+
+
 

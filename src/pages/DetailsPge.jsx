@@ -88,15 +88,18 @@ const DetailsPage = () => {
           />
         </div>
         <button
-          onClick={() => {
-            const updatedColorData = colors.map((colorData) => {
+          onClick={() => {  const updatedColorData = colors.map((colorArray) => {
+            const updatedArray = colorArray.map((colorData) => {
               if (colorData === color) {
                 return hexCode;
               }
               return colorData;
             });
-            dispatch(updatedColors(updatedColorData));
-            navigate("/save");
+            return updatedArray;
+          });
+          dispatch(updatedColors(updatedColorData));
+          navigate("/save");
+        
           }}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
