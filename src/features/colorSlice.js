@@ -8,13 +8,13 @@ const colorSlice = createSlice({
   },
   reducers: {
     colorStore: (state, action) => {
-      const lastGroup = state.colorData[state.colorData.length - 1];
-      if (lastGroup && lastGroup.length < 4) {
-        lastGroup.push(action.payload);
-      } else {
+      // const lastGroup = state.colorData[state.colorData.length - 1];
+      // if (lastGroup && lastGroup.length < 4) {
+      //   lastGroup.push(action.payload);
+      // } else {
         console.log(action.payload);
         state.colorData.push(action.payload);
-      }
+      
     },
     saveGeneratedColors: (state, action) => {
       state.colorData=action.payload;

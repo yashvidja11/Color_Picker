@@ -18,16 +18,22 @@ const ColorPicker = () => {
   };
 
   const handleSaveColor = () => {
-    if (colorGroup.length < 5) {
+    if (colorGroup.length < 4) {
       setColorGroup([...colorGroup, inputValue]);
       setInputValue("");
-      if (colorGroup.length === 4) {
-        dispatch(colorStore(colorGroup));
-        setColorGroup([]); 
-        navigate("/generate"); 
+      if (colorGroup.length === 3) {
+        dispatch(colorStore([...colorGroup, inputValue]));
       }
     }
+    if (colorGroup.length === 3) {
+      setColorGroup([...colorGroup, inputValue]); 
+      setInputValue("");
+      dispatch(colorStore([...colorGroup, inputValue]));
+      setColorGroup([]); 
+      navigate("/generate");
+    }
   };
+  
 
   const rgbCode = Color(inputValue).toRgbString();
 
@@ -61,19 +67,11 @@ const ColorPicker = () => {
           >
             Save Color
           </button>
+          
         </div>
-
-        <div>
-          <button
-            onClick={() => navigate("/generate")}
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-2 fixed top-1 right-2"
-          >
-            Saved Color
-          </button>
-          <p className="fixed top-0 right-1 rounded-full bg-black text-white px-2">
-            {storedColors.length}
-          </p>
-        </div>
+        <div className="flex gap-2">{colorGroup.map((item)=>(
+            <div style={{backgroundColor : item}} className="border rounded w-12 h-12"> </div>
+          ))}</div>
       </div>
     </div>
   );
